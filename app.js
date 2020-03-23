@@ -16,44 +16,8 @@ const users = []
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-// TODO setup your api routes here
-
-app.get('/api/users200', (req, res) => {
-  res.json(user)
-});
-
-app.post('/api/users201', (req, res) => {
-  const user = req.body;
-  users.push(user);
-  res.status(201).end();
-});
-
-app.get('/api/courses200', (res, req) => {
-  //Returns a list of courses (including the user that owns each course)
-});
-
-app.get('/api/:id200', (res, req) => {
-  //Returns the course (including the user that owns the course) for the provided course ID
-});
-
-app.post('/api/courses201', (res, req) => {
-  // Creates a course, sets the Location header to the URI for the course, and returns no content
-});
-
-app.put('/api/courses/:id204', (res, req) => {
-  // Updates a course and returns no content
-});
-
-app.delete('/api/courses/:id204', (res, req) => {
-  // Deletes a course and returns no content
-});
-
-// setup a friendly greeting for the root route
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to the REST API project!',
-  });
-});
+// Check for routes
+app.use(routes);
 
 // send 404 if no other route matched
 app.use((req, res) => {
