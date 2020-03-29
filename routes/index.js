@@ -122,11 +122,8 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
 
 router.delete('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
     const user = req.currentUser;
-    res.status(204);
-    res.json({
-        name: user.name,
-        username: user.username
-    });
+    await Course.destroy({where: {id: req.params.id}})
+    res.status(204).end();
     // Deletes a course and returns no content
 }));
 
