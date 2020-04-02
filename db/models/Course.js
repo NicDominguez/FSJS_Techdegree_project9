@@ -1,16 +1,20 @@
+'use strict';
+
 const Sequelize = require('sequelize');
 
 // Creates Book model with validation
 module.exports = (sequelize) => {
     class Course extends Sequelize.Model { }
     Course.init({
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
         title: {
             type: Sequelize.STRING,
             allowNull: false,
             validate: {
-                notNull: {
-                    message: 'Please provide a title'
-                },
                 notEmpty: {
                     message: 'Please provide a title'
                 }
@@ -20,9 +24,6 @@ module.exports = (sequelize) => {
             type: Sequelize.TEXT,
             allowNull: false,
             validate: {
-                notNull: {
-                    message: 'Please provide a description'
-                },
                 notEmpty: {
                     message: 'Please provide a description'
                 }
@@ -39,7 +40,12 @@ module.exports = (sequelize) => {
     }, { sequelize });
     
     Course.associate = (models) => {
-        Course.belongsTo(models.User);
+        Course.belongsTo(models.User, {
+                foreignKey: {
+                    fieldName: 'userId',
+                    allowNull: false,
+                },
+            });
     }
 
     return Course;
