@@ -187,18 +187,14 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
         }
     } else {
         const user = req.currentUser;
-        const course = await Course.update(req.body, {
-            where: {
-                id: req.params.id,
-                userId: user.id
-            }
-        });
-        if (course.length === 0) {
+        const course = await Course.findByPk(req.params.id)
+        if (course.userId !== user.id) {
             throw error = {
                 status: 403,
                 message: "I'm sorry but this course does not belong to the current user"
             }
         } else {
+            await Course.update(req.body, { where: {id: req.params.id} } )
             res.status(204).end(); 
         }
     }
@@ -207,17 +203,14 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
     
 router.delete('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
     const user = req.currentUser;
-    const course = await Course.findByPk(req.params.id, {where: {userId: user.id}})
-    if (!course) {
+    const course = await Course.findByPk(req.params.id)
+    if (course.userId !== user.id) {
         throw error = {
             status: 403,
             message: "I'm sorry but this course does not belong to the current user"
         }
     } else {
-        await Course.destroy({ where: {
-            id: req.params.id,
-            userId: user.id
-        }});
+        await Course.destroy( { where: {id: req.params.id} } );
         res.status(204).end();
     }
 }));
